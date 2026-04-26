@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS `tb_pengajuan` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nim` varchar(20) NOT NULL,
+  `nama_lengkap` varchar(150) NOT NULL,
+  `semester` varchar(10) NOT NULL,
+  `ipk` decimal(3,2) NOT NULL DEFAULT '0.00',
+  `status_spp` varchar(50) NOT NULL,
+  `status_mahasiswa` varchar(50) NOT NULL,
+  `status_verifikasi` varchar(50) NOT NULL DEFAULT 'Belum Diverifikasi',
+  `jenis_mahasiswa` varchar(50) NOT NULL DEFAULT 'Belum menerima',
+  `status_beasiswa_siga` varchar(50) NOT NULL DEFAULT 'Belum Aktif',
+  `catatan_admin` text,
+  `hasil_kelayakan` varchar(50) DEFAULT NULL,
+  `catatan` text,
+  `badge_class` varchar(20) DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nim_unique` (`nim`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
