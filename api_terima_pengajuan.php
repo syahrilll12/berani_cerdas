@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     echo json_encode([
         'status' => 'ready',
         'message' => 'API Berani Cerdas siap menerima pengajuan beasiswa dari SIGA.',
-        'endpoint' => 'POST http://localhost/berani-cerdas/api_terima_pengajuan.php',
+        'endpoint' => 'POST https://berani-cerdas.syahkty.dev/api_terima_pengajuan.php',
         'format_didukung' => [
             'object langsung',
             'object dengan data_received',
