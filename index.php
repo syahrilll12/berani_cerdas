@@ -217,8 +217,8 @@ async function verifikasiNode(nim) {
     if (!confirm('Lanjutkan proses untuk NIM ' + nim + '?')) return;
     
     try {
-        // 1. Ambil Token JWT dari Node.js
-        const loginRes = await fetch('http://localhost:3000/api/login', {
+        // 1. Ambil Token JWT dari Node.js (Ubah URL ke jalur relatif)
+        const loginRes = await fetch('/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ client_id: 'siga8', client_secret: 'secret123' })
@@ -230,8 +230,8 @@ async function verifikasiNode(nim) {
             return;
         }
 
-        // 2. Panggil API Verifikasi Node.js menggunakan metode PUT
-        const verifRes = await fetch('http://localhost:3000/api/verifikasi-status/' + encodeURIComponent(nim), {
+        // 2. Panggil API Verifikasi Node.js (Ubah URL ke jalur relatif)
+        const verifRes = await fetch('/api/verifikasi-status/' + encodeURIComponent(nim), {
             method: 'PUT',
             headers: { 
                 'Authorization': 'Bearer ' + loginData.token,
@@ -247,7 +247,7 @@ async function verifikasiNode(nim) {
             alert('Error: ' + verifData.message);
         }
     } catch (e) {
-        alert('Gagal menghubungi server Node.js. Pastikan Anda sudah menjalankan "node server.js" dan server berjalan di port 3000.');
+        alert('Gagal menghubungi server API. Pastikan Nginx dan Node.js berjalan normal.');
         console.error(e);
     }
 }
