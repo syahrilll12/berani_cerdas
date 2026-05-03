@@ -28,3 +28,5 @@ Thumbs.db
 
 
 koneksi.php
+# Logs
+logs/
