@@ -167,7 +167,7 @@ $message = $_GET['msg'] ?? '';
                         <td>Belum menerima</td>
                         <td><?= e($m['catatan']) ?></td>
                         <td>
-                            <a class="small-btn" href="api_verifikasi_status_beasiswa.php?nim=<?= urlencode($m['nim']) ?>">Verifikasi</a>
+                            <button class="small-btn" onclick="verifikasiNode('<?= e($m['nim']) ?>')">Verifikasi</button>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -193,7 +193,7 @@ $message = $_GET['msg'] ?? '';
                 <p>NIM <?= e($m['nim']) ?> · IPK <?= e($m['ipk']) ?> · <?= e($m['status_spp']) ?></p>
                 <b>Exception:</b> tidak dapat diterima karena IPK anda rendah.
                 <?php if (($m['status_verifikasi'] ?? '') !== 'Ditolak'): ?>
-                    <div class="card-action"><a class="small-btn danger-action" href="api_verifikasi_status_beasiswa.php?nim=<?= urlencode($m['nim']) ?>">Proses Penolakan</a></div>
+                    <div class="card-action"><button class="small-btn danger-action" onclick="verifikasiNode('<?= e($m['nim']) ?>')">Proses Penolakan</button></div>
                 <?php endif; ?>
             </div>
         <?php endforeach; ?>
@@ -212,5 +212,45 @@ $message = $_GET['msg'] ?? '';
     };
 </script>
 <script src="assets/script.js"></script>
+<script>
+async function verifikasiNode(nim) {
+    if (!confirm('Lanjutkan proses untuk NIM ' + nim + '?')) return;
+    
+    try {
+        // 1. Ambil Token JWT dari Node.js
+        const loginRes = await fetch('http://localhost:3000/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ client_id: 'siga8', client_secret: 'secret123' })
+        });
+        const loginData = await loginRes.json();
+        
+        if (!loginData.token) {
+            alert('Gagal mendapatkan akses token dari server Node.js');
+            return;
+        }
+
+        // 2. Panggil API Verifikasi Node.js menggunakan metode PUT
+        const verifRes = await fetch('http://localhost:3000/api/verifikasi-status/' + encodeURIComponent(nim), {
+            method: 'PUT',
+            headers: { 
+                'Authorization': 'Bearer ' + loginData.token,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const verifData = await verifRes.json();
+        
+        if (verifData.status === 'success') {
+            window.location.href = 'index.php?msg=' + encodeURIComponent(verifData.message);
+        } else {
+            alert('Error: ' + verifData.message);
+        }
+    } catch (e) {
+        alert('Gagal menghubungi server Node.js. Pastikan Anda sudah menjalankan "node server.js" dan server berjalan di port 3000.');
+        console.error(e);
+    }
+}
+</script>
 </body>
 </html>
